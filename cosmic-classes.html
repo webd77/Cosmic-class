@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmic Class — Sapno ki Udaan, Rakesh Sir ke saath</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0A0E23;
+    --nebula:#141A3D;
+    --panel:#1B2350;
+    --star:#F6C453;
+    --comet:#8FE3D2;
+    --lavender:#B7A9FF;
+    --mars:#E2795C;
+    --ink:#EDEBF7;
+    --ink-dim:#A9A6CC;
+    --line: rgba(237,235,247,0.12);
+    --radius-soft: 6px;
+    --radius-round: 999px;
+    --ease: cubic-bezier(.22,.8,.25,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--void);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    line-height:1.15;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  ul{list-style:none;}
+  section{position:relative; padding:110px 8vw; scroll-margin-top:88px;}
+  .wrap{max-width:1180px; margin:0 auto;}
+  .eyebrow{
+    color:var(--comet);
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.05rem;
+    margin-bottom:10px;
+    display:block;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:15px 30px;
+    border-radius:var(--radius-round);
+    font-weight:600;
+    font-size:0.98rem;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), background .35s var(--ease), color .35s var(--ease);
+    position:relative;
+    overflow:hidden;
+  }
+  .btn-primary{
+    background:var(--star);
+    color:#241503;
+    box-shadow:0 0 0 0 rgba(246,196,83,.6);
+  }
+  .btn-primary:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 30px -8px rgba(246,196,83,.55);
+  }
+  .btn-primary::after{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.55), transparent 60%);
+    opacity:0;
+    transition:opacity .4s;
+  }
+  .btn-primary:hover::after{opacity:1;}
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink);
+    border-color:var(--line);
+  }
+  .btn-ghost:hover{
+    border-color:var(--comet);
+    color:var(--comet);
+    transform:translateY(-3px);
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    padding:22px 8vw;
+    display:flex; align-items:center; justify-content:space-between;
+    backdrop-filter: blur(10px);
+    background:linear-gradient(to bottom, rgba(10,14,35,.85), rgba(10,14,35,0));
+    transition:background .3s;
+  }
+  header.scrolled{ background:rgba(10,14,35,.92); box-shadow:0 1px 0 var(--line); }
+  .logo{ display:flex; align-items:center; gap:12px; font-family:'Fraunces',serif; font-weight:600; font-size:1.3rem; }
+  .logo-mark{
+    width:34px; height:34px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--star) 40%, #b9781a 100%);
+    box-shadow:0 0 22px rgba(246,196,83,.55);
+    flex-shrink:0;
+  }
+  nav ul{display:flex; gap:34px; align-items:center;}
+  nav a{ font-size:.95rem; color:var(--ink-dim); transition:color .25s; position:relative;}
+  nav a:not(.btn):hover{ color:var(--ink);}
+  nav a:not(.btn)::after{
+    content:""; position:absolute; left:0; bottom:-6px; width:0; height:1px; background:var(--comet);
+    transition:width .3s var(--ease);
+  }
+  nav a:not(.btn):hover::after{ width:100%; }
+  .nav-toggle{ display:none; background:none; border:none; color:var(--ink); font-size:1.6rem; cursor:pointer; }
+
+  @media (max-width:900px){
+    nav ul{
+      position:fixed; top:0; right:-100%; height:100vh; width:78%;
+      background:var(--nebula); flex-direction:column; justify-content:center;
+      transition:right .4s var(--ease); box-shadow:-10px 0 40px rgba(0,0,0,.4);
+    }
+    nav ul.open{ right:0; }
+    .nav-toggle{ display:block; z-index:101;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex; align-items:center;
+    padding-top:120px;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 10%, rgba(183,169,255,.18), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 10% 90%, rgba(143,227,210,.12), transparent 60%),
+      var(--void);
+  }
+  #starfield{ position:absolute; inset:0; z-index:0; }
+  .hero .wrap{ position:relative; z-index:2; display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:center; width:100%; }
+  .hero h1{ font-size:clamp(2.4rem, 5vw, 3.6rem); margin-bottom:22px; }
+  .hero h1 em{ font-style:italic; color:var(--star); font-weight:500; }
+  .hero p.lede{ color:var(--ink-dim); font-size:1.12rem; max-width:480px; margin-bottom:36px; }
+  .hero-ctas{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:40px; }
+  .hero-trust{ display:flex; gap:30px; color:var(--ink-dim); font-size:.88rem; flex-wrap:wrap; }
+  .hero-trust b{ color:var(--ink); font-family:'Fraunces',serif; font-size:1.3rem; display:block; }
+
+  .orbit-stage{
+    position:relative; width:360px; height:360px; margin:0 auto;
+  }
+  .orbit-sun{
+    position:absolute; top:50%; left:50%;
+    width:104px; height:104px; margin:-52px 0 0 -52px;
+    border-radius:50%; z-index:3;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--star) 45%, #b9781a 100%);
+    box-shadow:0 0 55px rgba(246,196,83,.55), inset 0 0 0 2px rgba(237,235,247,.2);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:700; font-size:1.05rem; color:#241503;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+    cursor:pointer;
+  }
+  .orbit-sun:hover{ transform:scale(1.14); box-shadow:0 0 75px rgba(246,196,83,.75), inset 0 0 0 2px rgba(237,235,247,.3); }
+  .orbit-ring{
+    position:absolute; top:50%; left:50%; border:1px dashed rgba(237,235,247,.22); border-radius:50%;
+  }
+  .orbit-ring.chem{ width:196px; height:196px; margin:-98px 0 0 -98px; animation: spin 20s linear infinite; }
+  .orbit-ring.phy{ width:312px; height:312px; margin:-156px 0 0 -156px; animation: spin 34s linear infinite reverse; }
+  @keyframes spin{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+  .orbit-planet{ position:absolute; top:0; left:50%; width:56px; height:56px; margin:-28px 0 0 -28px; z-index:2; }
+  .planet-face{
+    position:absolute; inset:0; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:600; font-size:.82rem;
+    color:#1a1330; box-shadow:0 6px 18px rgba(0,0,0,.35);
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+    cursor:pointer;
+  }
+  .orbit-ring.chem .planet-face{ background:var(--comet); }
+  .orbit-ring.phy .planet-face{ background:var(--mars); color:#2a0f08; }
+  .planet-face:hover{ transform:scale(1.24); box-shadow:0 12px 30px rgba(0,0,0,.5), 0 0 28px rgba(246,196,83,.5); }
+
+  @media (max-width:900px){
+    .hero .wrap{ grid-template-columns:1fr; text-align:left; }
+    .orbit-stage{ margin-top:20px; width:260px; height:260px; }
+    .orbit-sun{ width:76px; height:76px; margin:-38px 0 0 -38px; font-size:.85rem; }
+    .orbit-ring.chem{ width:142px; height:142px; margin:-71px 0 0 -71px; }
+    .orbit-ring.phy{ width:226px; height:226px; margin:-113px 0 0 -113px; }
+    .orbit-planet{ width:44px; height:44px; margin:-22px 0 0 -22px; }
+    .planet-face{ font-size:.72rem; }
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .sec-head{ max-width:640px; margin-bottom:56px; }
+  .sec-head h2{ font-size:clamp(1.8rem, 3.4vw, 2.6rem); }
+  .sec-head p{ color:var(--ink-dim); margin-top:14px; font-size:1.05rem; }
+
+  /* ---------- ABOUT ---------- */
+  .about{ background:var(--nebula); }
+  .about-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:70px; align-items:center; }
+  .about-photo{ position:relative; border-radius:var(--radius-soft); overflow:hidden; }
+  .about-photo img{ width:100%; height:100%; object-fit:cover; aspect-ratio:4/5; }
+  .about-photo::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, transparent 60%, rgba(10,14,35,.7));
+  }
+  .about-stats{ display:grid; grid-template-columns:repeat(2,1fr); gap:28px; margin-top:40px; }
+  .stat b{ font-family:'Fraunces',serif; font-size:2.4rem; color:var(--star); display:block; }
+  .stat span{ color:var(--ink-dim); font-size:.92rem; }
+  .about-text p{ color:var(--ink-dim); margin-bottom:16px; max-width:520px; }
+
+  @media (max-width:900px){ .about-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- FACULTY ---------- */
+  .faculty-card{
+    display:grid; grid-template-columns:0.8fr 1.2fr;
+    background:var(--panel); border-radius:var(--radius-soft);
+    overflow:hidden; box-shadow:0 30px 60px -30px rgba(0,0,0,.5);
+    border:1px solid var(--line);
+  }
+  .faculty-photo{ position:relative; overflow:hidden; }
+  .faculty-photo img{ width:100%; height:100%; object-fit:cover; min-height:420px; transition:transform .7s var(--ease); }
+  .faculty-card:hover .faculty-photo img{ transform:scale(1.05); }
+  .faculty-body{ padding:52px; display:flex; flex-direction:column; justify-content:center; }
+  .faculty-body .role{ color:var(--comet); font-family:'Fraunces',serif; font-style:italic; margin-bottom:6px; }
+  .faculty-body h3{ font-size:2rem; margin-bottom:16px; }
+  .faculty-body p{ color:var(--ink-dim); margin-bottom:22px; }
+  .faculty-quote{
+    border-left:2px solid var(--star); padding-left:18px; margin:18px 0 26px;
+    font-family:'Fraunces',serif; font-style:italic; font-size:1.15rem; color:var(--ink);
+  }
+  .faculty-tags{ display:flex; gap:10px; flex-wrap:wrap; }
+  .faculty-tags span{
+    border:1px solid var(--line); padding:7px 16px; border-radius:var(--radius-round);
+    font-size:.82rem; color:var(--ink-dim);
+  }
+  @media (max-width:900px){ .faculty-card{ grid-template-columns:1fr; } .faculty-body{padding:36px;} .faculty-photo img{min-height:280px;} }
+
+  /* ---------- COURSES ---------- */
+  .courses{ background:var(--nebula); }
+  .course-list{ display:flex; flex-direction:column; gap:2px; border-top:1px solid var(--line); }
+  .course-row{
+    display:grid; grid-template-columns:70px 1.3fr 1.7fr 140px;
+    gap:26px; align-items:center; padding:32px 10px;
+    border-bottom:1px solid var(--line);
+    transition:background .3s;
+  }
+  .course-row:hover{ background:rgba(183,169,255,.05); }
+  .course-num{ font-family:'Fraunces',serif; color:var(--ink-dim); font-size:.95rem; }
+  .course-row h3{ font-size:1.4rem; }
+  .course-row h3 span{ display:block; font-family:'Work Sans',sans-serif; font-weight:500; font-size:.85rem; color:var(--ink-dim); margin-top:4px;}
+  .course-feats{ display:flex; gap:22px; flex-wrap:wrap; color:var(--ink-dim); font-size:.9rem; }
+  .course-feats i{ color:var(--comet); font-style:normal; margin-right:6px; }
+  .course-cta{ justify-self:end; }
+  .course-cta a{
+    color:var(--star); font-size:.92rem; font-weight:600;
+    border-bottom:1px solid transparent; padding-bottom:3px;
+    transition:border-color .3s;
+  }
+  .course-cta a:hover{ border-color:var(--star); }
+  @media (max-width:900px){
+    .course-row{ grid-template-columns:1fr; gap:10px; }
+    .course-cta{ justify-self:start; }
+  }
+
+  /* ---------- WHY ---------- */
+  .why-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:2px; background:var(--line); border-radius:var(--radius-soft); overflow:hidden;}
+  .why-card{ background:var(--void); padding:38px 30px; }
+  .why-card .ic{
+    width:44px; height:44px; border-radius:50%; margin-bottom:22px;
+    display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+    background:rgba(246,196,83,.14); color:var(--star);
+  }
+  .why-card h4{ font-size:1.1rem; margin-bottom:10px; }
+  .why-card p{ color:var(--ink-dim); font-size:.92rem; }
+  @media (max-width:900px){ .why-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .why-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- RESULTS ---------- */
+  .results{ background:var(--nebula); }
+  .result-strip{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:22px;
+  }
+  .result-card{
+    background:var(--panel); border-radius:var(--radius-soft); padding:26px;
+    border:1px solid var(--line);
+    transform:translateY(0);
+    transition:transform .4s var(--ease), border-color .4s;
+  }
+  .result-card:hover{ transform:translateY(-8px); border-color:var(--comet); }
+  .result-card b{ font-family:'Fraunces',serif; font-size:1.5rem; color:var(--star); display:block; margin-bottom:2px; }
+  .result-card h4{ font-size:1.05rem; margin-bottom:4px; }
+  .result-card span{ color:var(--ink-dim); font-size:.85rem; }
+  @media (max-width:900px){ .result-strip{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .result-strip{ grid-template-columns:1fr; } }
+
+  /* ---------- CONTACT ---------- */
+  .contact{ background:var(--nebula); }
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:70px; }
+  .contact-info h3{ font-size:1.6rem; margin-bottom:18px; }
+  .contact-info p{ color:var(--ink-dim); margin-bottom:26px; max-width:420px; }
+  .contact-info ul{ display:flex; flex-direction:column; gap:16px; }
+  .contact-info li{ display:flex; gap:14px; align-items:flex-start; color:var(--ink-dim); font-size:.95rem; }
+  .contact-info li b{ color:var(--ink); display:block; font-weight:600; }
+  .contact-actions{ display:flex; flex-direction:column; gap:20px; }
+  .contact-action{
+    display:flex; align-items:center; gap:20px;
+    padding:28px; border-radius:var(--radius-soft);
+    background:var(--panel); border:1px solid var(--line);
+    transition:transform .35s var(--ease), border-color .35s var(--ease);
+  }
+  .contact-action:hover{ transform:translateY(-4px); border-color:var(--comet); }
+  .contact-action .ic{
+    width:52px; height:52px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:1.4rem;
+  }
+  .contact-action.call .ic{ background:rgba(246,196,83,.16); }
+  .contact-action.whatsapp .ic{ background:rgba(143,227,210,.16); }
+  .contact-action b{ display:block; font-family:'Fraunces',serif; font-size:1.2rem; margin-bottom:3px; }
+  .contact-action span{ color:var(--ink-dim); font-size:.88rem; }
+  @media (max-width:900px){ .contact-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- FOOTER ---------- */
+  footer{ padding:50px 8vw; border-top:1px solid var(--line); }
+  .foot-grid{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; max-width:1180px; margin:0 auto; }
+  .foot-grid p{ color:var(--ink-dim); font-size:.85rem; }
+  .foot-social{ display:flex; gap:16px; }
+  .foot-social a{ color:var(--ink-dim); transition:color .3s; }
+  .foot-social a:hover{ color:var(--star); }
+
+  .counter{ font-variant-numeric: tabular-nums; }
+  /* ---------- REVEAL ---------- */
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  :focus-visible{ outline:2px solid var(--comet); outline-offset:3px; }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <a href="#top" class="logo"><span class="logo-mark"></span> Cosmic Class</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu kholen">☰</button>
+  <nav>
+    <ul id="navList">
+      <li><a href="#about">Institute</a></li>
+      <li><a href="#faculty">Rakesh Sir</a></li>
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="tel:+919876543210" class="btn btn-ghost">📞 Call</a></li>
+      <li><a href="https://wa.me/919876543210?text=Namaste%2C%20mujhe%20Cosmic%20Classes%20ke%20course%20ke%20baare%20mein%20jaankari%20chahiye" target="_blank" rel="noopener" class="btn btn-primary">💬 WhatsApp</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <canvas id="starfield"></canvas>
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Class 8th – 10th ke liye Foundation Coaching</span>
+      <h1>Concepts clear ho jaayein,<br>toh <em>result khud</em> bolta hai.</h1>
+      <p class="lede">Cosmic Class mein Rakesh Sir ke saath Physics, Chemistry aur Maths ko itni gehrai se padhaya jaata hai ki exam ka darr, samajh mein badal jaata hai.</p>
+      <div class="hero-ctas">
+        <a href="https://wa.me/919876543210?text=Namaste%2C%20mujhe%20Cosmic%20Classes%20ke%20course%20ke%20baare%20mein%20jaankari%20chahiye" target="_blank" rel="noopener" class="btn btn-primary">💬 WhatsApp Par Baat Karein</a>
+        <a href="tel:+919876543210" class="btn btn-ghost">📞 Call Karein</a>
+      </div>
+      <div class="hero-trust">
+        <div><b><span class="counter" data-target="14" data-suffix="+">0</span></b> saal ka anubhav</div>
+        <div><b><span class="counter" data-target="3000" data-suffix="+" data-comma="true">0</span></b> students padh chuke hain</div>
+        <div><b><span class="counter" data-target="90" data-suffix="%">0</span></b> students scoring best</div>
+      </div>
+    </div>
+    <div class="orbit-stage">
+      <div class="orbit-ring chem">
+        <div class="orbit-planet"><span class="planet-face">Chem</span></div>
+      </div>
+      <div class="orbit-ring phy">
+        <div class="orbit-planet"><span class="planet-face">Phy</span></div>
+      </div>
+      <div class="orbit-sun">Math</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="about-photo reveal">
+      <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=700&auto=format&fit=crop" alt="Cosmic Class ke students padhte hue">
+    </div>
+    <div class="about-text reveal">
+      <span class="eyebrow">Hamare baare mein</span>
+      <h2>Ek chhoti si class se shuru hui, ek pehchaan ban gayi.</h2>
+      <p>2012 mein Rakesh Sir ne apne mohalle ke bachchon ko padhana shuru kiya tha. Aaj Cosmic Classes shehar ke sabse trusted Foundation coaching institutes mein se ek hai — Class 8th se 10th tak ke bachchon ke liye — lekin niyat wahi hai: har bachche ka concept 100% clear hona chahiye.</p>
+      <p>Yahan batch chhote rakhe jaate hain, doubt session roz hota hai, aur test series se pata chalta hai ki board exam mein aap kahan khade hain.</p>
+      <div class="about-stats">
+        <div class="stat"><b><span class="counter" data-target="3000" data-suffix="+" data-comma="true">0</span></b><span>Students taught</span></div>
+        <div class="stat"><b><span class="counter" data-target="90" data-suffix="%">0</span></b><span>Students scoring best</span></div>
+        <div class="stat"><b><span class="counter" data-target="50" data-suffix="+">0</span></b><span>Students per batch</span></div>
+        <div class="stat"><b><span class="counter" data-target="14" data-suffix="+">0</span></b><span>Years of teaching</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FACULTY -->
+<section id="faculty">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Aapke shikshak</span>
+      <h2>Rakesh Sir se miliye</h2>
+      <p>Jo Physics ko story ki tarah samjhate hain, aur har student ka naam yaad rakhte hain.</p>
+    </div>
+    <div class="faculty-card reveal">
+      <div class="faculty-photo">
+        <img src="rakesh sir.png" alt="Rakesh Sir, Founder aur Physics faculty, Cosmic Classes">
+      </div>
+      <div class="faculty-body">
+        <span class="role">Founder &amp; Physics Faculty</span>
+        <h3>Rakesh Sir</h3>
+        <p>B.Tech aur 14 saal se zyada teaching anubhav ke saath, Rakesh Sir ne 3,000 se zyada students ko Class 8th se 10th tak Physics, Chemistry aur Maths padhaya hai aur unhe board exams mein top score karne mein madad ki hai. Unka maanna hai ki Physics dar ka subject nahi, samajhne ka subject hai.</p>
+        <p class="faculty-quote">"Jab tak formula ke peeche ki wajah samajh na aaye, marks aayenge — lekin samajh nahi banegi. Main dono chahta hoon."</p>
+        <div class="faculty-tags">
+          <span>B.Tech</span>
+          <span>14+ years experience</span>
+          <span>Class 8th-10th expert</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section class="courses" id="courses">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Hamare courses</span>
+      <h2>Apni class ke hisaab se course chunen</h2>
+      <p>Har course structured hai — chapter-wise notes, weekly tests aur doubt-clearing sessions ke saath.</p>
+    </div>
+    <div class="course-list reveal">
+      <div class="course-row">
+        <span class="course-num">01</span>
+        <h3>Foundation Batch<span>Class 8th</span></h3>
+        <div class="course-feats"><span><i>▸</i>Physics, Chem, Maths basics</span><span><i>▸</i>NCERT-based</span><span><i>▸</i>Concept building</span></div>
+        <div class="course-cta"><a href="#contact">Jaankari lein</a></div>
+      </div>
+      <div class="course-row">
+        <span class="course-num">02</span>
+        <h3>Foundation Batch<span>Class 9th</span></h3>
+        <div class="course-feats"><span><i>▸</i>Chapter-wise notes</span><span><i>▸</i>Monthly tests</span><span><i>▸</i>Board prep shuru</span></div>
+        <div class="course-cta"><a href="#contact">Jaankari lein</a></div>
+      </div>
+      <div class="course-row">
+        <span class="course-num">03</span>
+        <h3>Board Batch<span>Class 10th</span></h3>
+        <div class="course-feats"><span><i>▸</i>Poora syllabus + sample papers</span><span><i>▸</i>Board exam pattern</span><span><i>▸</i>Chapter-wise tests</span></div>
+        <div class="course-cta"><a href="#contact">Jaankari lein</a></div>
+      </div>
+    
+      
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Cosmic Class kyun</span>
+      <h2>Padhai jo sirf marks ke liye nahi, samajh ke liye ho</h2>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-card"><div class="ic">✦</div><h4>Batch size</h4><p>50+ students tak ki batch size, taaki har bachche par personal dhyaan mile.</p></div>
+      <div class="why-card"><div class="ic">✦</div><h4>Roz doubt session</h4><p>Class ke baad har roz saam me ek ghanta doubt clearing ke liye rakha jaata hai.</p></div>
+      <div class="why-card"><div class="ic">✦</div><h4>Test series</h4><p>Har month test, aur uska detailed rank + weak-area analysis milta hai.</p></div>
+      <div class="why-card"><div class="ic">✦</div><h4>Bord preparation</h4><p>Boards ke exam ke pahle revision, sample papers aur conpetency based questions aur test liye jate hai .</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results" id="results">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Hamare toppers</span>
+      <h2>Result khud bolta hai</h2>
+    </div>
+    <div class="result-strip reveal">
+      <div class="result-card">
+        <b><span class="counter" data-target="97.8" data-decimals="1" data-suffix="%">0%</span></b>
+        <h4>Ananya Sharma</h4>
+        <span>Class 10th Boards, 2025</span>
+      </div>
+      <div class="result-card">
+        <b>District Topper</b>
+        <h4>Rohit Kumar</h4>
+        <span>NTSE, 2025</span>
+      </div>
+      <div class="result-card">
+        <b><span class="counter" data-target="98.4" data-decimals="1" data-suffix="%">0%</span></b>
+        <h4>Priya Verma</h4>
+        <span>Class 10th Boards, 2025</span>
+      </div>
+      <div class="result-card">
+        <b><span class="counter" data-target="95.6" data-decimals="1" data-suffix="%">0%</span></b>
+        <h4>Aditya Singh</h4>
+        <span>Class 9th Annual Exam, 2025</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-info reveal">
+      <span class="eyebrow">Chaliye baat karte hain</span>
+      <h3>Call or Chat on whatsapp</h3>
+      <p>Course, batch timing ya fees ke baare mein jaankari chahiye? Seedhe call karein ya WhatsApp par message bhejein .</p>
+      <ul>
+        <li>📍<div><b>Address</b>Double transfarmer Kharjurbanna gali Bihar road Hilsa Nalanda</div></li>
+        <li>✉️<div><b>Email</b>hello@cosmicclasses.in</div></li>
+        <li>🕒<div><b>Class Timings</b>Subah 7 baje se raat 8 baje tak</div></li>
+      </ul>
+    </div>
+    <div class="contact-actions reveal">
+      <a href="tel:+919876543210" class="contact-action call">
+        <span class="ic">📞</span>
+        <span><b>+91 98765 43210</b><span>Contact No</span></span>
+      </a>
+      <a href="https://wa.me/919876543210?text=Namaste%2C%20mujhe%20Cosmic%20Classes%20ke%20course%20ke%20baare%20mein%20jaankari%20chahiye" target="_blank" rel="noopener" class="contact-action whatsapp">
+        <span class="ic">💬</span>
+        <span><b>WhatsApp No</b><span>+91 98765 43210 </span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-grid">
+    <a href="#top" class="logo"><span class="logo-mark"></span> Cosmic Class</a>
+    <p>© 2026 Cosmic Class, Hilsa. Sabhi adhikaar surakshit.</p>
+    <div class="foot-social">
+      <a href="#" aria-label="Facebook">FB</a>
+      <a href="#" aria-label="YouTube">YT</a>
+      <a href="#" aria-label="Instagram">IG</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- Nav scroll + mobile toggle ----
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+  const navToggle = document.getElementById('navToggle');
+  const navList = document.getElementById('navList');
+  navToggle.addEventListener('click', () => navList.classList.toggle('open'));
+  navList.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navList.classList.remove('open')));
+
+  // ---- Button glow follows cursor ----
+  document.querySelectorAll('.btn-primary').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const r = btn.getBoundingClientRect();
+      btn.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      btn.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  // ---- Reveal on scroll ----
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  }
+
+  // ---- Count-up animation for stats ----
+  function formatCounterValue(value, decimals, comma) {
+    let display = decimals ? value.toFixed(decimals) : Math.round(value).toString();
+    if (comma) display = Number(display).toLocaleString('en-IN');
+    return display;
+  }
+  const counters = document.querySelectorAll('.counter');
+  if (reduceMotion) {
+    counters.forEach(el => {
+      const target = parseFloat(el.dataset.target);
+      const decimals = parseInt(el.dataset.decimals || '0', 10);
+      const comma = el.dataset.comma === 'true';
+      el.textContent = formatCounterValue(target, decimals, comma) + (el.dataset.suffix || '');
+    });
+  } else {
+    const counterIO = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseFloat(el.dataset.target);
+        const decimals = parseInt(el.dataset.decimals || '0', 10);
+        const comma = el.dataset.comma === 'true';
+        const suffix = el.dataset.suffix || '';
+        const duration = 1500;
+        const start = performance.now();
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = formatCounterValue(target * eased, decimals, comma) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        counterIO.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(el => counterIO.observe(el));
+  }
+
+  // ---- Starfield canvas ----
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function initStars() {
+    const hero = canvas.closest('.hero');
+    canvas.width = hero.offsetWidth;
+    canvas.height = hero.offsetHeight;
+    const count = Math.floor((canvas.width * canvas.height) / 9000);
+    stars = Array.from({ length: count }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.3 + 0.3,
+      a: Math.random(),
+      speed: Math.random() * 0.015 + 0.003
+    }));
+  }
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.a += s.speed;
+      const twinkle = 0.4 + Math.abs(Math.sin(s.a)) * 0.6;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(246,196,83,${twinkle * 0.9})`;
+      ctx.fill();
+    });
+    if (!reduceMotion) requestAnimationFrame(drawStars);
+  }
+  initStars();
+  drawStars();
+  window.addEventListener('resize', initStars);
+</script>
+</body>
+</html>
